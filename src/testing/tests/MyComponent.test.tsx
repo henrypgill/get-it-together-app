@@ -1,4 +1,5 @@
-import { render, screen } from "../testUtils/testUtils";
+// import { render, screen } from "../testUtils/testUtils";
+import { render } from "../testUtils/testUtils";
 
 //An example of using react-testing-library
 describe("MyComponent", async () => {
