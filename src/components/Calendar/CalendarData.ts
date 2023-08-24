@@ -1,8 +1,5 @@
 import { DbUserData } from "../../../../get-it-together-server/src/types";
-import {
-    getCalendarDaysOfMonth,
-    getFirstDayOfMonth,
-} from "./calendarUtils";
+import { getCalendarDaysOfMonth, getFirstDayOfMonth } from "./calendarUtils";
 
 export class CalendarData {
     year: number;
@@ -18,13 +15,13 @@ export class CalendarData {
     }
 
     incrementYear = () => {
-        this.year++;        
+        this.year++;
         this.updateDays();
-    }
+    };
     decrementYear = () => {
         this.year--;
         this.updateDays();
-    }
+    };
 
     incrementMonth() {
         if (this.monthIndex === 11) {
@@ -46,7 +43,7 @@ export class CalendarData {
     }
 
     updateDays() {
-        this.days = getCalendarDaysOfMonth(this.year, this. monthIndex)
+        this.days = getCalendarDaysOfMonth(this.year, this.monthIndex);
     }
 }
 
@@ -64,7 +61,13 @@ export class CalendarDay {
     weekIndex: number;
     dayIndex: number;
 
-    constructor(year: number, month: number, day: number, weekIndex: number, dayIndex: number) {
+    constructor(
+        year: number,
+        month: number,
+        day: number,
+        weekIndex: number,
+        dayIndex: number
+    ) {
         this.date = new Date(year, month, day);
         this.weekIndex = weekIndex;
         this.dayIndex = dayIndex;

@@ -16,10 +16,10 @@ import {
 //     error: Error
 // }
 // interface ActionMeta extends ActionObject {
-    
+
 // }
 
-type ActionObject<T> = {[key: string]: T}
+type ActionObject<T> = { [key: string]: T };
 export type ActionPayload = ActionObject;
 export type ActionMeta = ActionObject;
 
@@ -29,5 +29,3 @@ export interface Action {
     error?: boolean;
     meta: ActionMeta;
 }
-
-
