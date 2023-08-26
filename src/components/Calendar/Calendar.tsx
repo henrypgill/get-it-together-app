@@ -1,15 +1,12 @@
 import { DayCard } from "./DayCard";
 import "../../styles/Calendar.css";
 import "../../styles/DayCard.css";
-// import { getCurrentMonth, getDaysOfMonth } from './calendarUtils'
 import { getMonthName } from "./calendarUtils";
 import store from "../../redux/store";
 import { calendarSlice } from "../../redux/calendarSlice";
 
 export function Calendar(): JSX.Element {
-    // const [currentMonth, setCurrentMonth] = useState<Date>(new Date(2022, 3, 5))
-
-    const calendar = store.getState().calendar;
+    const calendarState = store.getState().calendar;
 
     function handleNextMonthClick() {
         store.dispatch(calendarSlice.actions.incrementMonth());
@@ -17,21 +14,31 @@ export function Calendar(): JSX.Element {
     function handlePrevMonthClick() {
         store.dispatch(calendarSlice.actions.decrementMonth());
     }
-    // function handleNextYearClick() {
-    //     store.dispatch(calendarSlice.actions.incrementYear())
-    // }
-    // function handlePrevYearClick() {
-    //     store.dispatch(calendarSlice.actions.decrementYear())
-    // }
+    function handleNextYearClick() {
+        store.dispatch(calendarSlice.actions.incrementYear());
+    }
+    function handlePrevYearClick() {
+        store.dispatch(calendarSlice.actions.decrementYear());
+    }
 
     return (
         <div className="calendar-section-content">
             <div className="calendar-container">
                 <div className="month-year-container">
-                    <button className="year-button">{"<"}</button>
-                    <h2>{getMonthName(calendar.monthIndex)}</h2>
+                    <button
+                        className="year-button"
+                        onClick={() => handlePrevYearClick()}
+                    >
+                        {"<"}
+                    </button>
+                    <h2>{getMonthName(calendarState.monthIndex)}</h2>
                     <h2>2023</h2>
-                    <button className="year-button">{">"}</button>
+                    <button
+                        className="year-button"
+                        onClick={() => handleNextYearClick()}
+                    >
+                        {">"}
+                    </button>
                 </div>
                 <div className="month-view">
                     <button
@@ -62,7 +69,7 @@ export function Calendar(): JSX.Element {
                         <h3 className="day-heading calendar-cell-0-7">
                             Sunday
                         </h3>
-                        {calendar.days.map((calendarDay) => (
+                        {calendarState.days.map((calendarDay) => (
                             <DayCard
                                 date={calendarDay.date}
                                 weekIndex={calendarDay.weekIndex}

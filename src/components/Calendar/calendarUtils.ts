@@ -1,21 +1,12 @@
 // import { CalendarData, CalendarDay } from "./calendarTypes";
 import { CalendarDay, CalendarData } from "./CalendarData";
 
+/**
+ *
+ * @param monthIndex the 0-indexed month number - i.e. january = 0
+ * @returns the number of days in the month
+ */
 export function getNumberOfDaysInMonth(monthIndex: number /*MonthIndex*/) {
-    // const monthsAndDays = {
-    //     january: 31,
-    //     february: 28,
-    //     march: 31,
-    //     april: 30,
-    //     may: 31,
-    //     june: 30,
-    //     july: 31,
-    //     august: 31,
-    //     september: 30,
-    //     october: 31,
-    //     november: 30,
-    //     december: 31,
-    // };
     switch (monthIndex) {
         case 0:
             return 31;
@@ -46,7 +37,16 @@ export function getNumberOfDaysInMonth(monthIndex: number /*MonthIndex*/) {
     }
 }
 
+/**
+ *
+ * @param monthIndex the 0-indexed month number - i.e. january = 0
+ * @returns the name of the month in lowercase
+ */
 export function getMonthName(monthIndex: number): string {
+    if (monthIndex > 11 || monthIndex < 0) {
+        return "month index exceeds bounds 0 - 11";
+    }
+
     switch (monthIndex) {
         case 0:
             return "january";
@@ -73,7 +73,7 @@ export function getMonthName(monthIndex: number): string {
         case 11:
             return "december";
         default:
-            return "incorrect month index, it is zero indexed";
+            return "incorrect month index";
     }
 }
 
@@ -126,35 +126,3 @@ export function getInitialCalendarState(): CalendarData {
     const initialState = new CalendarData(currentMonth);
     return initialState;
 }
-
-// console.log(firstDayOfMonthIndex)
-// console.log(days)
-
-// const minutes = [0, 15, 30, 45];
-
-// const hours = [
-//     0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19,
-//     20, 21, 22, 23, 24,
-// ];
-
-// export function getInitialDate() {
-
-//   const todaysDate = new Date();
-//   const todaysYear = todaysDate.getFullYear()
-//   const todaysMonth = todaysDate.getMonth()
-//   const todaysDay = todaysDate.getDate()
-//   const todaysHour = todaysDate.getHours()
-//   const todaysMinute = todaysDate.getMinutes()
-//   const todaysSecond = todaysDate.getSeconds()
-//   const todaysMillisecond = todaysDate.getMilliseconds()
-
-//   const newDate = {
-//     year: todaysYear,
-//     month: todaysMonth,
-//     day: todaysDay,
-//     hour: todaysHour,
-//     minute: todaysMinute,
-//     second: todaysSecond,
-//     millisecond: todaysMillisecond,
-//   }
-// }
