@@ -106,9 +106,10 @@ export function getCalendarDaysOfMonth(
                 year,
                 monthIndex,
                 i,
-                dayIndex,
-                weekIndex
+                weekIndex,
+                dayIndex
             );
+            console.log(dayIndex);
             days.push(newDay);
             dayIndex++;
             i++;
