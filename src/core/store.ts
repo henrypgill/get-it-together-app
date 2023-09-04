@@ -5,10 +5,7 @@ import { calendarSlice } from "./calendarSlice";
 const store = configureStore({
     reducer: {
         calendar: calendarSlice.reducer,
-        // calendarReducer
     },
 });
 
 export default store;
-
-// console.log(store.dispatch(calendarSlice.actions.decrementMonth()))

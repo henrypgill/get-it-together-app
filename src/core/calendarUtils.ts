@@ -1,5 +1,82 @@
-// import { CalendarData, CalendarDay } from "./calendarTypes";
-import { CalendarDay, CalendarData } from "./CalendarData";
+import { CalendarData, CalendarDay } from "../app";
+
+/**
+ *
+ * @param month the month which you wish to get the CalendarDays for.
+ * @returns an array of CalendarDays objects for the given month without their associated users.
+ */
+export function getCalendarDaysOfMonth(
+    year: number,
+    monthIndex: number
+): CalendarDay[] {
+    const firstDayOfMonth = new Date(year, monthIndex, 1);
+    const firstDayOfMonthIndex = firstDayOfMonth.getDay();
+    const numberOfDaysInMonth = getNumberOfDaysInMonth(monthIndex);
+    const days = [];
+    let i = 1;
+    let weekIndex = 1;
+    let dayIndex = firstDayOfMonthIndex;
+
+    while (i <= numberOfDaysInMonth) {
+        while (i <= numberOfDaysInMonth && dayIndex <= 7) {
+            const dayDate = new Date(year, monthIndex, i);
+            const newDay: CalendarDay = {
+                date: dayDate.getTime(),
+                weekIndex: weekIndex,
+                dayIndex: dayIndex,
+            };
+            days.push(newDay);
+            dayIndex++;
+            i++;
+        }
+        weekIndex++;
+        dayIndex = 1;
+    }
+
+    return days;
+}
+
+export function getInitialCalendarState(currentDate?: Date): CalendarData {
+    const date = getFirstDayOfMonth(currentDate ?? new Date());
+    const initialState: CalendarData = {
+        year: date.getFullYear(),
+        monthIndex: date.getMonth(),
+        days: getCalendarDaysOfMonth(date.getFullYear(), date.getMonth()),
+    };
+    return initialState;
+}
+
+export function setCalendarYear(targetYear: number, calendar: CalendarData) {
+    calendar.days = getCalendarDaysOfMonth(targetYear, calendar.monthIndex);
+    calendar.year = targetYear;
+}
+export function setMonth(targetMonthIndex: number, calendar: CalendarData) {
+    calendar.days = getCalendarDaysOfMonth(calendar.year, targetMonthIndex);
+    calendar.monthIndex = targetMonthIndex;
+}
+
+export function stepYear(n = 1, calendar: CalendarData) {
+    calendar.days = getCalendarDaysOfMonth(calendar.year, calendar.monthIndex);
+    calendar.year += n;
+}
+
+export function stepMonth(n = 1, calendar: CalendarData) {
+    if (calendar.monthIndex === 11 && n === 1) {
+        calendar.days = getCalendarDaysOfMonth(calendar.year + 1, 0);
+        calendar.year += 1;
+        calendar.monthIndex = 0;
+    } else if (calendar.monthIndex === 0 && n === -1) {
+        calendar.days = getCalendarDaysOfMonth(calendar.year - 1, 11);
+        calendar.year -= 1;
+        calendar.monthIndex = 11;
+    } else {
+        calendar.days = getCalendarDaysOfMonth(
+            calendar.year,
+            calendar.monthIndex + n
+        );
+        calendar.monthIndex += n;
+    }
+}
 
 /**
  *
@@ -81,90 +158,4 @@ export function getFirstDayOfMonth(date: Date): Date {
     const firstDayOfMonth = new Date(date.getTime());
     firstDayOfMonth.setDate(1);
     return firstDayOfMonth;
-}
-
-/**
- *
- * @param month the month which you wish to get the CalendarDays for.
- * @returns an array of CalendarDays objects for the given month without their associated users.
- */
-export function getCalendarDaysOfMonth(
-    year: number,
-    monthIndex: number
-): CalendarDay[] {
-    const firstDayOfMonth = new Date(year, monthIndex, 1);
-    const firstDayOfMonthIndex = firstDayOfMonth.getDay();
-    const numberOfDaysInMonth = getNumberOfDaysInMonth(monthIndex);
-    const days = [];
-    let i = 1;
-    let weekIndex = 1;
-    let dayIndex = firstDayOfMonthIndex;
-
-    while (i <= numberOfDaysInMonth) {
-        while (i <= numberOfDaysInMonth && dayIndex <= 7) {
-            const newDay: CalendarDay = {
-                date: new Date(year, monthIndex, i),
-                weekIndex: weekIndex,
-                dayIndex: dayIndex,
-            };
-            days.push(newDay);
-            dayIndex++;
-            i++;
-        }
-        weekIndex++;
-        dayIndex = 1;
-    }
-
-    return days;
-}
-
-export function getInitialCalendarState(currentDate?: Date): CalendarData {
-    const date = getFirstDayOfMonth(currentDate ?? new Date());
-
-    const initialState: CalendarData = {
-        year: date.getFullYear(),
-        monthIndex: date.getMonth(),
-        days: getCalendarDaysOfMonth(date.getFullYear(), date.getMonth()),
-    };
-    return initialState;
-}
-
-export function setCalendarYear(targetYear: number, calendar: CalendarData) {
-    calendar.days = getCalendarDaysOfMonth(targetYear, calendar.monthIndex);
-    calendar.year = targetYear;
-}
-export function setMonth(targetMonthIndex: number, calendar: CalendarData) {
-    calendar.days = getCalendarDaysOfMonth(calendar.year, targetMonthIndex);
-    calendar.monthIndex = targetMonthIndex;
-}
-
-export function stepYear(n = 1, calendar: CalendarData) {
-    calendar.days = getCalendarDaysOfMonth(calendar.year, calendar.monthIndex);
-    calendar.year += n;
-}
-
-export function stepMonth(n = 1, calendar: CalendarData) {
-    if (calendar.monthIndex === 11 && n === 1) {
-        calendar.days = getCalendarDaysOfMonth(calendar.year + 1, 0);
-        calendar.year += 1;
-        calendar.monthIndex = 0;
-    } else if (calendar.monthIndex === 0 && n === -1) {
-        calendar.days = getCalendarDaysOfMonth(calendar.year - 1, 11);
-        calendar.year -= 1;
-        calendar.monthIndex = 11;
-        // } else if (calendar.monthIndex === 0 && n > 1) {
-        //     calendar.days = getCalendarDaysOfMonth(calendar.year, calendar.monthIndex);
-        //     calendar.year += 1;
-        //     calendar.monthIndex += n;
-        // } else if ((calendar.monthIndex - n) === 0 && n < -1) {
-        //     calendar.days = getCalendarDaysOfMonth(calendar.year, calendar.monthIndex);
-        //     calendar.year += 1;
-        //     calendar.monthIndex += n;
-    } else {
-        calendar.days = getCalendarDaysOfMonth(
-            calendar.year,
-            calendar.monthIndex + n
-        );
-        calendar.monthIndex += n;
-    }
 }

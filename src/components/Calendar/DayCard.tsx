@@ -1,18 +1,17 @@
-import { CalendarDay } from "../../core/CalendarData";
-
-// type DayCardProps =
+import { CalendarDay } from "../../app";
 
 interface DayCardProps extends Partial<CalendarDay> {
-    date: Date;
+    date_number: number;
     weekIndex: number;
     dayIndex: number;
 }
 
 export function DayCard({
-    date,
+    date_number,
     weekIndex,
     dayIndex,
 }: DayCardProps): JSX.Element {
+    const date = new Date(date_number);
     return (
         <button className={`day-card calendar-cell-${weekIndex}-${dayIndex}`}>
             <h3>{date.getDate()}</h3>

@@ -2,14 +2,20 @@ import { DayCard } from "./DayCard";
 import "../../styles/Calendar.css";
 import "../../styles/DayCard.css";
 import { getMonthName } from "../../core/calendarUtils";
-import store from "../../redux/store";
-import { calendarSlice } from "../../redux/calendarSlice";
+import store from "../../core/store";
+import { calendarSlice } from "../../core/calendarSlice";
 import { CalendarDayHeadings } from "./CalendarDayHeadings";
 
-export function Calendar(): JSX.Element {
-    const calendarState = store.getState().calendar;
+import { useSelector } from "react-redux";
+import { CalendarData } from "../../app";
 
-    // console.log(store.dispatch(calendarSlice.actions.decrementMonth))
+interface RootState {
+    calendar: CalendarData;
+}
+
+export function Calendar(): JSX.Element {
+    // const calendarState = store.getState().calendar;
+    const calendarState = useSelector((state: RootState) => state.calendar);
 
     function handleNextMonthClick() {
         store.dispatch(calendarSlice.actions.stepMonth(1));
@@ -35,7 +41,7 @@ export function Calendar(): JSX.Element {
                         {"<"}
                     </button>
                     <h2>{getMonthName(calendarState.monthIndex)}</h2>
-                    <h2>2023</h2>
+                    <h2>{calendarState.year}</h2>
                     <button
                         className="year-button"
                         onClick={() => handleNextYearClick()}
@@ -54,10 +60,10 @@ export function Calendar(): JSX.Element {
                         {<CalendarDayHeadings />}
                         {calendarState.days.map((calendarDay) => (
                             <DayCard
-                                date={calendarDay.date}
+                                date_number={calendarDay.date}
                                 weekIndex={calendarDay.weekIndex}
                                 dayIndex={calendarDay.dayIndex}
-                                key={`${calendarDay.date.getTime()}`}
+                                key={`${calendarDay.date}`}
                             />
                         ))}
                     </div>
