@@ -102,14 +102,11 @@ export function getCalendarDaysOfMonth(
 
     while (i <= numberOfDaysInMonth) {
         while (i <= numberOfDaysInMonth && dayIndex <= 7) {
-            const newDay = new CalendarDay(
-                year,
-                monthIndex,
-                i,
-                weekIndex,
-                dayIndex
-            );
-            console.log(dayIndex);
+            const newDay: CalendarDay = {
+                date: new Date(year, monthIndex, i),
+                weekIndex: weekIndex,
+                dayIndex: dayIndex,
+            };
             days.push(newDay);
             dayIndex++;
             i++;
@@ -121,8 +118,53 @@ export function getCalendarDaysOfMonth(
     return days;
 }
 
-export function getInitialCalendarState(): CalendarData {
-    const currentMonth = getFirstDayOfMonth(new Date());
-    const initialState = new CalendarData(currentMonth);
+export function getInitialCalendarState(currentDate?: Date): CalendarData {
+    const date = getFirstDayOfMonth(currentDate ?? new Date());
+
+    const initialState: CalendarData = {
+        year: date.getFullYear(),
+        monthIndex: date.getMonth(),
+        days: getCalendarDaysOfMonth(date.getFullYear(), date.getMonth()),
+    };
     return initialState;
+}
+
+export function setCalendarYear(targetYear: number, calendar: CalendarData) {
+    calendar.days = getCalendarDaysOfMonth(targetYear, calendar.monthIndex);
+    calendar.year = targetYear;
+}
+export function setMonth(targetMonthIndex: number, calendar: CalendarData) {
+    calendar.days = getCalendarDaysOfMonth(calendar.year, targetMonthIndex);
+    calendar.monthIndex = targetMonthIndex;
+}
+
+export function stepYear(n = 1, calendar: CalendarData) {
+    calendar.days = getCalendarDaysOfMonth(calendar.year, calendar.monthIndex);
+    calendar.year += n;
+}
+
+export function stepMonth(n = 1, calendar: CalendarData) {
+    if (calendar.monthIndex === 11 && n === 1) {
+        calendar.days = getCalendarDaysOfMonth(calendar.year + 1, 0);
+        calendar.year += 1;
+        calendar.monthIndex = 0;
+    } else if (calendar.monthIndex === 0 && n === -1) {
+        calendar.days = getCalendarDaysOfMonth(calendar.year - 1, 11);
+        calendar.year -= 1;
+        calendar.monthIndex = 11;
+        // } else if (calendar.monthIndex === 0 && n > 1) {
+        //     calendar.days = getCalendarDaysOfMonth(calendar.year, calendar.monthIndex);
+        //     calendar.year += 1;
+        //     calendar.monthIndex += n;
+        // } else if ((calendar.monthIndex - n) === 0 && n < -1) {
+        //     calendar.days = getCalendarDaysOfMonth(calendar.year, calendar.monthIndex);
+        //     calendar.year += 1;
+        //     calendar.monthIndex += n;
+    } else {
+        calendar.days = getCalendarDaysOfMonth(
+            calendar.year,
+            calendar.monthIndex + n
+        );
+        calendar.monthIndex += n;
+    }
 }

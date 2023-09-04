@@ -1,4 +1,4 @@
-import { CalendarDay } from "./CalendarData";
+import { CalendarDay } from "../../core/CalendarData";
 
 // type DayCardProps =
 

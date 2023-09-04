@@ -1,24 +1,27 @@
 import { DayCard } from "./DayCard";
 import "../../styles/Calendar.css";
 import "../../styles/DayCard.css";
-import { getMonthName } from "./calendarUtils";
+import { getMonthName } from "../../core/calendarUtils";
 import store from "../../redux/store";
 import { calendarSlice } from "../../redux/calendarSlice";
+import { CalendarDayHeadings } from "./CalendarDayHeadings";
 
 export function Calendar(): JSX.Element {
     const calendarState = store.getState().calendar;
 
+    // console.log(store.dispatch(calendarSlice.actions.decrementMonth))
+
     function handleNextMonthClick() {
-        store.dispatch(calendarSlice.actions.incrementMonth());
+        store.dispatch(calendarSlice.actions.stepMonth(1));
     }
     function handlePrevMonthClick() {
-        store.dispatch(calendarSlice.actions.decrementMonth());
+        store.dispatch(calendarSlice.actions.stepMonth(-1));
     }
     function handleNextYearClick() {
-        store.dispatch(calendarSlice.actions.incrementYear());
+        store.dispatch(calendarSlice.actions.stepYear(1));
     }
     function handlePrevYearClick() {
-        store.dispatch(calendarSlice.actions.decrementYear());
+        store.dispatch(calendarSlice.actions.stepYear(-1));
     }
 
     return (
@@ -48,27 +51,7 @@ export function Calendar(): JSX.Element {
                         {"<"}
                     </button>
                     <div className="days-grid">
-                        <h3 className="day-heading calendar-cell-0-1">
-                            Monday
-                        </h3>
-                        <h3 className="day-heading calendar-cell-0-2">
-                            Tuesday
-                        </h3>
-                        <h3 className="day-heading calendar-cell-0-3">
-                            Wednesday
-                        </h3>
-                        <h3 className="day-heading calendar-cell-0-4">
-                            Thursday
-                        </h3>
-                        <h3 className="day-heading calendar-cell-0-5">
-                            Friday
-                        </h3>
-                        <h3 className="day-heading calendar-cell-0-6">
-                            Saturday
-                        </h3>
-                        <h3 className="day-heading calendar-cell-0-7">
-                            Sunday
-                        </h3>
+                        {<CalendarDayHeadings />}
                         {calendarState.days.map((calendarDay) => (
                             <DayCard
                                 date={calendarDay.date}
